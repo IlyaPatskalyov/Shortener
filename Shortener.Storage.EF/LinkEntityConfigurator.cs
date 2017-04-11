@@ -13,6 +13,11 @@ namespace Shortener.Storage.EF
             ec.ToTable("Links");
             ec.HasKey(p => p.Id);
             ec.Property(p => p.Url).IsRequired();
+            ec.Property(p => p.UserId)
+                .IsRequired()
+                .HasColumnAnnotation(
+                    IndexAnnotation.AnnotationName,
+                    new IndexAnnotation(new IndexAttribute("IX_UserId", 1)));
             ec.Property(p => p.Key)
                 .IsRequired()
                 .HasMaxLength(20)

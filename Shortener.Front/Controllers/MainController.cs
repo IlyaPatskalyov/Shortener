@@ -16,8 +16,6 @@ namespace Shortener.Front.Controllers
 
         public ActionResult Index()
         {
-            var link = linksRepository.Create("http://stackoverflow.com/questions/21573550/setting-unique-constraint-with-fluent-api");
-            Log.Information("Save {@link}", link);
             return View();
         }
 

@@ -1,8 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
+using System.Web.SessionState;
 using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
@@ -27,7 +29,8 @@ namespace Shortener.Front
             builder.RegisterAssemblyTypes(frontAssembly).AsImplementedInterfaces();
 
             builder.RegisterType<SQLiteDbContext>().As<IDbContext>().InstancePerLifetimeScope();
-            builder.RegisterAssemblyTypes(Loader.LoadFromBinDirectory("Shortener*.dll")).AsImplementedInterfaces();;
+            builder.RegisterAssemblyTypes(Loader.LoadFromBinDirectory("Shortener*.dll")).AsImplementedInterfaces();
+            ;
 
             var container = builder.Build();
             AreaRegistration.RegisterAllAreas();
@@ -48,6 +51,18 @@ namespace Shortener.Front
             ApplicationLifecycleModule.RequestLoggingLevel = LogEventLevel.Debug;
             ApplicationLifecycleModule.LogPostedFormData = LogPostedFormDataOption.OnlyOnError;
             ApplicationLifecycleModule.FilterPasswordsInFormData = false;
+        }
+
+        public override void Init()
+        {
+            this.PostAuthenticateRequest += MvcApplication_PostAuthenticateRequest;
+            base.Init();
+        }
+
+        void MvcApplication_PostAuthenticateRequest(object sender, EventArgs e)
+        {
+            System.Web.HttpContext.Current.SetSessionStateBehavior(
+                SessionStateBehavior.Required);
         }
     }
 }

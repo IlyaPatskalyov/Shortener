@@ -11,6 +11,8 @@ namespace Shortener.Datas
 
         public DateTime Modified { get; set; }
 
+        public string UserId { get; set; }
+
         public string Key { get; set; }
 
         public string Url { get; set; }

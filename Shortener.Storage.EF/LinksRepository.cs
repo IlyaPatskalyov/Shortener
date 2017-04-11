@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 using System.Linq;
+using System.Reflection;
+using System.Threading;
+using Serilog;
 using Shortener.Datas;
 
 namespace Shortener.Storage.EF
 {
     public class LinksRepository : ILinksRepository
     {
+        private static volatile int keyLength = 3;
         private readonly IDbContext db;
         private readonly DbSet<Link> set;
 
@@ -16,21 +21,29 @@ namespace Shortener.Storage.EF
             set = this.db.Set<Link>();
         }
 
-        public Link Create(string url)
+        public Link Create(string url, Guid userId)
         {
             if (string.IsNullOrEmpty(url)) throw new ArgumentNullException("link");
             Link link, current;
+            int i = 0;
             using (var transaction = db.Database.BeginTransaction())
             {
                 try
                 {
                     do
                     {
-                        link = BuildLink(url);
+                        if (i > 5)
+                        {
+                            Interlocked.CompareExchange(ref keyLength, keyLength + 1, keyLength);
+                            i = 0;
+                        }
+                        link = BuildLink(url, userId);
                         current = set.FirstOrDefault(p => p.Key == link.Key);
+                        i++;
                     } while (current != null);
                     set.Add(link);
                     db.SaveChanges();
+                    transaction.Commit();
                 }
                 catch
                 {
@@ -41,7 +54,7 @@ namespace Shortener.Storage.EF
             return link;
         }
 
-        private static Link BuildLink(string url)
+        private static Link BuildLink(string url, Guid userId)
         {
             var id = Guid.NewGuid();
             var created = DateTime.UtcNow;
@@ -52,7 +65,8 @@ namespace Shortener.Storage.EF
                 Created = created,
                 Modified = created,
                 CountOfRedirects = 0,
-                Key = Convert.ToBase64String(id.ToByteArray()).Substring(0, 10),
+                UserId = userId.ToString(),
+                Key = Convert.ToBase64String(id.ToByteArray()).Substring(0, keyLength),
                 Url = url
             };
             return link;
@@ -89,14 +103,23 @@ namespace Shortener.Storage.EF
             }
         }
 
-        public void Delete(string key)
+        public Link[] GetLinksByUserId(Guid userId)
+        {
+            var user = userId.ToString();
+            LogQuery(set.Where(x => x.UserId == user));
+            return set.Where(x => x.UserId == user).ToArray();
+        }
+
+
+        public void Delete(string key, Guid userId)
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
             using (var transaction = db.Database.BeginTransaction())
             {
                 try
                 {
-                    var link = set.FirstOrDefault(p => p.Key == key);
+                    var user = userId.ToString();
+                    var link = set.FirstOrDefault(p => p.Key == key && p.UserId == user);
                     if (link != null)
                     {
                         set.Remove(link);
@@ -111,5 +134,21 @@ namespace Shortener.Storage.EF
                 }
             }
         }
+
+        private static void LogQuery(IQueryable query)
+        {
+            var internalQueryField = query.GetType()
+                .GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
+                .FirstOrDefault(f => f.Name.Equals("_internalQuery"));
+            var internalQuery = internalQueryField.GetValue(query);
+            var objectQueryField = internalQuery.GetType()
+                .GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
+                .FirstOrDefault(f => f.Name.Equals("_objectQuery"));
+
+            var objectQuery = objectQueryField.GetValue(internalQuery) as ObjectQuery<Link>;
+
+            Log.Information(objectQuery.ToTraceString());
+        }
+
     }
 }
