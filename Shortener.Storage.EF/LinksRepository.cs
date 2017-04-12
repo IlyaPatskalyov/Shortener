@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Data.Entity;
-using System.Data.Entity.Core.Objects;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
-using Serilog;
 using Shortener.Datas;
 
 namespace Shortener.Storage.EF
 {
     public class LinksRepository : ILinksRepository
     {
-        private static volatile int keyLength = 3;
+
+        private const int NumberOfAttempts = 5;
+
+        private static int keyLength = 3;
+
         private readonly IDbContext db;
         private readonly DbSet<Link> set;
         private static readonly Regex KeyRegex = new Regex("[^A-Za-z0-9]+", RegexOptions.Compiled);
@@ -34,7 +35,7 @@ namespace Shortener.Storage.EF
                 {
                     do
                     {
-                        if (i > 5)
+                        if (i > NumberOfAttempts)
                         {
                             Interlocked.CompareExchange(ref keyLength, keyLength + 1, keyLength);
                             i = 0;
@@ -109,10 +110,8 @@ namespace Shortener.Storage.EF
         public Link[] GetLinksByUserId(Guid userId)
         {
             var user = userId.ToString();
-            LogQuery(set.Where(x => x.UserId == user));
             return set.Where(x => x.UserId == user).ToArray();
         }
-
 
         public void Delete(string key, Guid userId)
         {
@@ -136,21 +135,6 @@ namespace Shortener.Storage.EF
                     throw;
                 }
             }
-        }
-
-        private static void LogQuery(IQueryable query)
-        {
-            var internalQueryField = query.GetType()
-                                          .GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
-                                          .FirstOrDefault(f => f.Name.Equals("_internalQuery"));
-            var internalQuery = internalQueryField.GetValue(query);
-            var objectQueryField = internalQuery.GetType()
-                                                .GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
-                                                .FirstOrDefault(f => f.Name.Equals("_objectQuery"));
-
-            var objectQuery = objectQueryField.GetValue(internalQuery) as ObjectQuery<Link>;
-
-            Log.Information(objectQuery.ToTraceString());
         }
     }
 }
