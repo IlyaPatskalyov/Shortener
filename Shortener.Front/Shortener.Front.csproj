@@ -68,7 +68,7 @@
       <HintPath>..\packages\SerilogWeb.Classic.WebApi.1.0.3\lib\net45\SerilogWeb.Classic.WebApi.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration"/>
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
@@ -123,6 +123,7 @@
     <Compile Include="Sessions\Session.cs" />
     <Compile Include="Sessions\SessionModelBinder.cs" />
     <Compile Include="Settings\ApplicationSettings.cs" />
+    <Compile Include="Settings\IApplicationSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />

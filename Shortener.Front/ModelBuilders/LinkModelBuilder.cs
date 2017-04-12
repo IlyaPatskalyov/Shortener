@@ -5,14 +5,14 @@ namespace Shortener.Front.ModelBuilders
 {
     public class LinkModelBuilder : ILinkModelBuilder
     {
-        public LinkModel BuildLink(Link l)
+        public LinkModel BuildLink(Link link)
         {
             return new LinkModel
                    {
-                       Key = l.Key,
-                       Url = l.Url,
-                       Created = l.Created,
-                       CountOfRedirects = l.CountOfRedirects
+                       Key = link.Key,
+                       Url = link.Url,
+                       Created = link.Created,
+                       CountOfRedirects = link.CountOfRedirects
                    };
         }
     }

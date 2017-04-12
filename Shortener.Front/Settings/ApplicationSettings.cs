@@ -3,16 +3,9 @@ using System.Configuration;
 using System.IO;
 using System.Web;
 using Shortener.Front.Models;
-using Shortener.Storage.EF;
 
 namespace Shortener.Front.Settings
 {
-    public interface IApplicationSettings : IDbSettings
-    {
-        string LogPath { get; }
-        FrontendMode FrontendMode { get; }
-    }
-
     public class ApplicationSettings : IApplicationSettings
     {
         public string ConnectionString { get; private set; }

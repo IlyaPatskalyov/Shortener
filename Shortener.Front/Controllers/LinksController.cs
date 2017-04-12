@@ -22,12 +22,6 @@ namespace Shortener.Front.Controllers
             this.linkModelBuilder = linkModelBuilder;
         }
 
-        [HttpGet]
-        public Session Test([ModelBinder] Session session)
-        {
-            return session;
-        }
-
         [HttpPost]
         public string Add([ModelBinder] Session session, [FromBody] string url)
         {

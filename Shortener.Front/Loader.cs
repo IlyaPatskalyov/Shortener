@@ -7,9 +7,9 @@ using Serilog;
 
 namespace Shortener.Front
 {
-    public class Loader
+    public static class Loader
     {
-        public static string GetBinPath()
+        private static string GetBinPath()
         {
             var relativeSearchPath = AppDomain.CurrentDomain.RelativeSearchPath;
             if (String.IsNullOrEmpty(relativeSearchPath))

@@ -8,6 +8,7 @@ namespace Shortener.Storage
         Link Create(string url, Guid userId);
 
         Link GetByKey(string key);
+
         Link GetByKeyAndIncrement(string key);
 
         Link[] GetLinksByUserId(Guid userId);

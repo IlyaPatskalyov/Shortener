@@ -29,7 +29,7 @@ namespace Shortener.Front
             builder.RegisterAssemblyTypes(frontAssembly).AsImplementedInterfaces();
 
             builder.RegisterType<SQLiteDbContext>().As<IDbContext>().InstancePerLifetimeScope();
-            builder.RegisterAssemblyTypes(Loader.LoadFromBinDirectory("Shortener*.dll")).AsImplementedInterfaces();
+            builder.RegisterAssemblyTypes(Loader.LoadFromBinDirectory("Shortener.*.dll")).AsImplementedInterfaces();
 
             var container = builder.Build();
             AreaRegistration.RegisterAllAreas();

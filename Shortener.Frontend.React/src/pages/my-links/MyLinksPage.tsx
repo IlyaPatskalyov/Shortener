@@ -40,8 +40,8 @@ export class MyLinksPage extends React.Component<{}, {myLinks?: Link[]}> {
                         </tr>
                         </thead>
                         <tbody>
-                        {this.state.myLinks.map(l =>
-                            <tr>
+                        {this.state.myLinks.map((l, i) =>
+                            <tr key={i}>
                                 <td><a target="_blank" href={`/${l.key}`}>{l.key}</a></td>
                                 <td><a target="_blank" href={l.url}>{l.url.length > 100 ? l.url.substr(0, 100) + "..." : l.url}</a></td>
                                 <td>{moment(l.created).format("DD.MM.YYYY hh:mm")}</td>

@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Http.Controllers;
 using System.Web.Http.ModelBinding;
-using Serilog;
 
 namespace Shortener.Front.Sessions
 {
@@ -12,7 +11,7 @@ namespace Shortener.Front.Sessions
     {
         private const string CookieName = "UserId";
 
-        public static HttpContextWrapper GetHttpContextWrapper(HttpRequestMessage request)
+        private static HttpContextWrapper GetHttpContextWrapper(HttpRequestMessage request)
         {
             if (request.Properties.ContainsKey("MS_HttpContext"))
                 return ((HttpContextWrapper) request.Properties["MS_HttpContext"]);
@@ -21,12 +20,10 @@ namespace Shortener.Front.Sessions
             return null;
         }
 
-
         public bool BindModel(HttpActionContext actionContext, ModelBindingContext bindingContext)
         {
             if (bindingContext.ModelType != typeof(Session))
                 return false;
-
 
             Guid userId;
             if (!TryGetUserId(actionContext, out userId))
@@ -34,16 +31,16 @@ namespace Shortener.Front.Sessions
                 userId = Guid.NewGuid();
                 var response = GetHttpContextWrapper(actionContext.Request).Response;
                 response.Cookies.Add(new HttpCookie(CookieName, userId.ToString())
-                {
-                    HttpOnly = true,
-                    Expires = DateTime.MaxValue
-                });
+                                     {
+                                         HttpOnly = true,
+                                         Expires = DateTime.MaxValue
+                                     });
             }
 
             bindingContext.Model = new Session
-            {
-                UserId = userId
-            };
+                                   {
+                                       UserId = userId
+                                   };
 
             return true;
         }
