@@ -1,0 +1,25 @@
+<navigation/>
+<div className="container body-content">
+    <h1>My links</h1>
+    <table class="table table-striped table-bordered table-condensed table-hover" data-bind="if: loaded()">
+        <thead>
+        <tr>
+            <th>Short link</th>
+            <th>Link</th>
+            <th>Created</th>
+            <th>Count of redirects</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr data-bind="foreach: { data: myLinks, as : 'item' }">
+                <td><a target="_blank" data-bind="attr: { href: '/' + item.key }, text: item.key"></a></td>
+                <td><a target="_blank" data-bind="attr: { href: item.url }, text: item.url"></a></td>
+                <td data-bind="text: item.created"></td>
+                <td data-bind="text: item.countOfRedirects"></td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="container" data-bind="if: !loaded()">
+        Loading...
+    </div>
+</div>

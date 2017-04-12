@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "module": "amd",
+        "target": "es3",
+        "noImplicitAny":true,
+        "noImplicitReturns":true,
+        "inlineSourceMap": true,
+        "experimentalDecorators": true,
+        "jsx": "react"
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}

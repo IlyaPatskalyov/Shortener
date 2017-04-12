@@ -27,9 +27,6 @@ requirejs.config({
         "es6-promise": "../node_modules/es6-promise/dist/es6-promise",
         "es5-shim": "../node_modules/es5-shim/es5-shim",
         "es5-shim/es5-sham": "../node_modules/es5-shim/es5-sham",
-        "lodash": "../node_modules/lodash-compat/lodash",
-        "classnames": "../node_modules/classnames/index",
-        "jquery": "../node_modules/jquery/dist/jquery",
-        "microevent": "../node_modules/microevent/microevent"
+        "classnames": "../node_modules/classnames/index"
     }
 });
