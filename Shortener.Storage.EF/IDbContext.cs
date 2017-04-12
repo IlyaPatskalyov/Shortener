@@ -11,10 +11,13 @@ namespace Shortener.Storage.EF
         Database Database { get; }
 
         IEnumerable<DbEntityValidationResult> GetValidationErrors();
+
         DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
+
         DbSet<TEntity> Set<TEntity>() where TEntity : class;
 
         int SaveChanges();
+
         Task<int> SaveChangesAsync();
     }
 }

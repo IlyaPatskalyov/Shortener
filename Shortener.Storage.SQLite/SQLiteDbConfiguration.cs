@@ -10,7 +10,7 @@ namespace Shortener.Storage.SQLite
         public SQLiteDbConfiguration()
         {
             SetProviderFactory("System.Data.SQLite", SQLiteFactory.Instance);
-            SetProviderServices("System.Data.SQLite",(DbProviderServices) SQLiteProviderFactory.Instance.GetService(typeof(DbProviderServices)));
+            SetProviderServices("System.Data.SQLite", (DbProviderServices) SQLiteProviderFactory.Instance.GetService(typeof(DbProviderServices)));
         }
     }
 }

@@ -17,6 +17,5 @@ namespace Shortener.Front.Models
 
         [DataMember(Name = "countOfRedirects")]
         public int CountOfRedirects { get; set; }
-
     }
 }

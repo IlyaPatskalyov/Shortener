@@ -13,9 +13,9 @@ namespace Shortener.Storage.SQLite
 
         public SQLiteDbContext(IDbSettings settings, IEntityConfigurator[] entityConfigurators)
             : base(new SQLiteConnection()
-            {
-                ConnectionString = settings.ConnectionString
-            }, true)
+                   {
+                       ConnectionString = settings.ConnectionString
+                   }, true)
         {
             this.entityConfigurators = entityConfigurators;
         }
@@ -29,6 +29,5 @@ namespace Shortener.Storage.SQLite
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             base.OnModelCreating(modelBuilder);
         }
-
     }
 }

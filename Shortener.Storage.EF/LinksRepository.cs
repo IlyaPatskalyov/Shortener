@@ -37,7 +37,8 @@ namespace Shortener.Storage.EF
                                              attempt = 0;
                                          }
                                          link = BuildLink(url, userId);
-                                         current = set.FirstOrDefault(p => p.Key == link.Key);
+                                         var key = link.Key;
+                                         current = set.FirstOrDefault(p => p.Key == key);
                                          attempt++;
                                      } while (current != null);
                                      set.Add(link);

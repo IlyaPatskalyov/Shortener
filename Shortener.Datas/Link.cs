@@ -5,8 +5,6 @@ namespace Shortener.Datas
 {
     public class Link : Entity<Guid>
     {
-        public Guid Id { get; set; }
-
         public DateTime Created { get; set; }
 
         public DateTime Modified { get; set; }
