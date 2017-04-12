@@ -1,14 +1,4 @@
 import {Fetcher} from "../core/Fetcher";
-export interface Link {
-    Id: string;
-    UserId: string;
-    Created: string;
-    Modified: string;
-    Key: string;
-    Url: string;
-    CountOfRedirects: number;
-
-}
 
 export class LinksApi {
 

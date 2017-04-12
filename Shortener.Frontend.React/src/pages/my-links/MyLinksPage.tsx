@@ -1,12 +1,13 @@
 import * as React from "react";
 import {Navigation} from "../../components/navigation/Navigation";
-import {Link, LinksApi} from "../../api/LinksApi";
+import {LinksApi} from "../../api/LinksApi";
 import {Table} from "react-bootstrap";
+import moment = require("moment");
 
 export class MyLinksPage extends React.Component<{}, {myLinks?: Link[]}> {
 
     constructor(props: {}, context: {}) {
-        super(props, context)
+        super(props, context);
         this.state = {};
     }
 
@@ -14,7 +15,7 @@ export class MyLinksPage extends React.Component<{}, {myLinks?: Link[]}> {
         this.load();
     }
 
-    async load() {
+    private async load() {
         let links = await LinksApi.getMyLinks();
         this.setState({myLinks: links});
     }
@@ -41,10 +42,10 @@ export class MyLinksPage extends React.Component<{}, {myLinks?: Link[]}> {
                         <tbody>
                         {this.state.myLinks.map(l =>
                             <tr>
-                                <td><a target="_blank" href={`/${l.Key}`}>{l.Key}</a></td>
-                                <td><a target="_blank" href={l.Url}>{l.Url}</a></td>
-                                <td>{l.Created}</td>
-                                <td>{l.CountOfRedirects}</td>
+                                <td><a target="_blank" href={`/${l.key}`}>{l.key}</a></td>
+                                <td><a target="_blank" href={l.url}>{l.url.length > 100 ? l.url.substr(0, 100) + "..." : l.url}</a></td>
+                                <td>{moment(l.created).format("DD.MM.YYYY hh:mm")}</td>
+                                <td>{l.countOfRedirects}</td>
                             </tr>)}
                         </tbody>
                     </Table>}

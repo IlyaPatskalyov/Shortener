@@ -3,6 +3,7 @@ using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading;
 using Serilog;
 using Shortener.Datas;
@@ -14,6 +15,7 @@ namespace Shortener.Storage.EF
         private static volatile int keyLength = 3;
         private readonly IDbContext db;
         private readonly DbSet<Link> set;
+        private static readonly Regex KeyRegex = new Regex("[^A-Za-z0-9]+", RegexOptions.Compiled);
 
         public LinksRepository(IDbContext db)
         {
@@ -58,17 +60,18 @@ namespace Shortener.Storage.EF
         {
             var id = Guid.NewGuid();
             var created = DateTime.UtcNow;
+            var key = KeyRegex.Replace(Convert.ToBase64String(id.ToByteArray()).Substring(0, keyLength), "");
 
             var link = new Link()
-            {
-                Id = id,
-                Created = created,
-                Modified = created,
-                CountOfRedirects = 0,
-                UserId = userId.ToString(),
-                Key = Convert.ToBase64String(id.ToByteArray()).Substring(0, keyLength),
-                Url = url
-            };
+                       {
+                           Id = id,
+                           Created = created,
+                           Modified = created,
+                           CountOfRedirects = 0,
+                           UserId = userId.ToString(),
+                           Key = key,
+                           Url = url
+                       };
             return link;
         }
 
@@ -138,17 +141,16 @@ namespace Shortener.Storage.EF
         private static void LogQuery(IQueryable query)
         {
             var internalQueryField = query.GetType()
-                .GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
-                .FirstOrDefault(f => f.Name.Equals("_internalQuery"));
+                                          .GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
+                                          .FirstOrDefault(f => f.Name.Equals("_internalQuery"));
             var internalQuery = internalQueryField.GetValue(query);
             var objectQueryField = internalQuery.GetType()
-                .GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
-                .FirstOrDefault(f => f.Name.Equals("_objectQuery"));
+                                                .GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
+                                                .FirstOrDefault(f => f.Name.Equals("_objectQuery"));
 
             var objectQuery = objectQueryField.GetValue(internalQuery) as ObjectQuery<Link>;
 
             Log.Information(objectQuery.ToTraceString());
         }
-
     }
 }

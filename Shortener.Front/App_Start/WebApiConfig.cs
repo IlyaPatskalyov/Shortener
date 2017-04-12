@@ -13,8 +13,6 @@ namespace Shortener.Front
     {
         public static void Register(HttpConfiguration config)
         {
-            /*var appXmlType = config.Formatters.XmlFormatter.SupportedMediaTypes.FirstOrDefault(t => t.MediaType == "application/xml");
-            config.Formatters.XmlFormatter.SupportedMediaTypes.Remove(appXmlType);*/
             ConfigureFormatters(config);
             ConfigureRoutes(config);
             ConfigureServices(config);
@@ -23,7 +21,7 @@ namespace Shortener.Front
         private static void ConfigureServices(HttpConfiguration config)
         {
             config.Services.Insert(typeof(ModelBinderProvider), 0,
-                new SimpleModelBinderProvider(typeof(Session), new SessionModelBinder()));
+                                   new SimpleModelBinderProvider(typeof(Session), new SessionModelBinder()));
         }
 
         private static void ConfigureRoutes(HttpConfiguration config)
@@ -43,9 +41,9 @@ namespace Shortener.Front
         private static void ConfigureFormatters(HttpConfiguration config)
         {
             config.Formatters.JsonFormatter.SerializerSettings = new JsonSerializerSettings
-            {
-                Formatting = Formatting.Indented,
-            };
+                                                                 {
+                                                                     Formatting = Formatting.Indented,
+                                                                 };
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(
                 new Newtonsoft.Json.Converters.StringEnumConverter {CamelCaseText = true});
 

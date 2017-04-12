@@ -1,13 +1,29 @@
 import * as React from "react";
 import {Navigation} from "../../components/navigation/Navigation";
-import {Button, Jumbotron, Input, Col, Row, Grid, Glyphicon} from "react-bootstrap";
+import {Button, Jumbotron, Input, Col, Row, Grid, Glyphicon, Modal} from "react-bootstrap";
 import {LinksApi} from "../../api/LinksApi";
 
-export class AddLinkPage extends React.Component<{}, {url?: string, short?: string}> {
+export interface IAddLinkPageState {
+    url?: string;
+    short?: string;
+    error?: string;
+}
+
+export class AddLinkPage extends React.Component<{}, IAddLinkPageState> {
 
     constructor(props: {}, context: {}) {
-        super(props, context)
+        super(props, context);
         this.state = {};
+    }
+
+    private async addLink() {
+        try {
+            let short = await LinksApi.add(this.state.url);
+            this.setState({short: short});
+        }
+        catch(e) {
+            this.setState({ error: e.message })
+        }
     }
 
     render() {
@@ -28,9 +44,7 @@ export class AddLinkPage extends React.Component<{}, {url?: string, short?: stri
                             <Button bsStyle="primary" bsSize="large"
                                     disabled={!this.state.url || this.state.url.length == 0}
                                     onClick={async e => {
-                                        let short = await LinksApi.add(this.state.url);
-                                        this.setState({ short: short });
-
+                                        this.addLink();
                                         e.preventDefault();
                                      }}>Shorten URL</Button>
                         </div>
@@ -54,6 +68,15 @@ export class AddLinkPage extends React.Component<{}, {url?: string, short?: stri
                         </Col>
                     </Row>
                 </Grid>
+                <Modal show={this.state.error != null} onHide={() => this.setState({ error: null })}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Error</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>{this.state.error}</Modal.Body>
+                    <Modal.Footer>
+                        <Button onClick={() => this.setState({ error: null })}>Close</Button>
+                    </Modal.Footer>
+                </Modal>
             </div>
         </div>);
 

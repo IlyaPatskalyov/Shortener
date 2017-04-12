@@ -1,5 +1,3 @@
-/// <reference path="../../typings/whatwg-fetch.d.ts" />
-
 export class FetcherError {
     public response: Response;
     public innerError: any;
@@ -32,7 +30,7 @@ export class Fetcher {
         });
     }
 
-    public static get<T>(url: string, data?: any): Promise<T> {
+    public static get<T>(url: string): Promise<T> {
         return this.execute(url);
     }
 
@@ -42,7 +40,7 @@ export class Fetcher {
 
         let response = await window.fetch(url, init);
         if (response.status < 200 || response.status >= 300)
-            throw new FetcherError(response.statusText, response);
+            throw new FetcherError(await response.text(), response);
         if (response.status == 204 || response.status == 1223)
             return null;
 

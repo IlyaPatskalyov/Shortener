@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Web.Mvc;
-using Serilog;
+﻿using System.Web.Mvc;
 using Shortener.Storage;
 
 namespace Shortener.Front.Controllers
