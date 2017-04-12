@@ -1,25 +1,23 @@
-﻿import "./core/KoComponent";
+﻿import "css!bootstrap/bootstrap";
+import "css!bootstrap/bootstrap-theme";
+import "./core/KoComponent";
 import "./pages/my-links/MyLinksPage";
+import "./pages/add-link/AddLinkPage";
 import * as ko from "knockout";
 import Router = require("director");
 
 class Main {
     constructor() {
         this.page = ko.observable("");
-        let _this = this;
         this.router = new Router({
-            '/'() {
-                require(['pages/my-links/MyLinksPage'], () => {
-                    _this.page("my-links");
-                    _this.params({});
-                });
-            },
-            '/my-links'() {
-                require(['pages/my-links/MyLinksPage'], () => {
-                    _this.page("my-links");
-                    _this.params({});
-                });
-            }
+            '/': () => {
+                    this.page("add-link");
+                    this.params({});
+                },
+            '/my-links': () => {
+                    this.page("my-links");
+                    this.params({});
+                }
         });
         this.router.configure({
             html5history: false

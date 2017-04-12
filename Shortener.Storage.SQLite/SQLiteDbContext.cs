@@ -6,22 +6,15 @@ using SQLite.CodeFirst;
 
 namespace Shortener.Storage.SQLite
 {
-    [DbConfigurationType(typeof(SQLiteConfiguration))]
+    [DbConfigurationType(typeof(SQLiteDbConfiguration))]
     public class SQLiteDbContext : DbContext, IDbContext
     {
         private readonly IEntityConfigurator[] entityConfigurators;
 
-        public SQLiteDbContext(IEntityConfigurator[] entityConfigurators)
+        public SQLiteDbContext(IDbSettings settings, IEntityConfigurator[] entityConfigurators)
             : base(new SQLiteConnection()
             {
-                ConnectionString =
-                    new SQLiteConnectionStringBuilder()
-                        {
-                            DataSource = @"D:\RiderProjects\WebApplication.db",
-                            ForeignKeys = true,
-                            Version = 3
-                        }
-                        .ConnectionString
+                ConnectionString = settings.ConnectionString
             }, true)
         {
             this.entityConfigurators = entityConfigurators;

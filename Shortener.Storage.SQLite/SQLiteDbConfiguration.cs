@@ -5,9 +5,9 @@ using System.Data.SQLite.EF6;
 
 namespace Shortener.Storage.SQLite
 {
-    public class SQLiteConfiguration : DbConfiguration
+    public class SQLiteDbConfiguration : DbConfiguration
     {
-        public SQLiteConfiguration()
+        public SQLiteDbConfiguration()
         {
             SetProviderFactory("System.Data.SQLite", SQLiteFactory.Instance);
             SetProviderServices("System.Data.SQLite",(DbProviderServices) SQLiteProviderFactory.Instance.GetService(typeof(DbProviderServices)));

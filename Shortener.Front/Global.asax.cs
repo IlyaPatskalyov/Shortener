@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -12,6 +11,7 @@ using Serilog;
 using Serilog.Events;
 using SerilogWeb.Classic;
 using SerilogWeb.Classic.Enrichers;
+using Shortener.Front.Settings;
 using Shortener.Storage.EF;
 using Shortener.Storage.SQLite;
 
@@ -30,7 +30,6 @@ namespace Shortener.Front
 
             builder.RegisterType<SQLiteDbContext>().As<IDbContext>().InstancePerLifetimeScope();
             builder.RegisterAssemblyTypes(Loader.LoadFromBinDirectory("Shortener*.dll")).AsImplementedInterfaces();
-            ;
 
             var container = builder.Build();
             AreaRegistration.RegisterAllAreas();
@@ -42,7 +41,7 @@ namespace Shortener.Front
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
-                .WriteTo.RollingFile(Path.Combine(HttpRuntime.AppDomainAppPath, @"..\logs\log-{Date}.txt"))
+                .WriteTo.RollingFile(container.Resolve<IApplicationSettings>().LogPath)
                 .Enrich.With<HttpRequestIdEnricher>()
                 .Enrich.With<HttpRequestTraceIdEnricher>()
                 .Enrich.With<UserNameEnricher>()

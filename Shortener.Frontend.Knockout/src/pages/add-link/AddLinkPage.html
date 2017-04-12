@@ -1,0 +1,32 @@
+<navigation></navigation>
+<div class="container body-content">
+    <div class="jumbotron">
+        <h2>Simplify your links</h2>
+        <div data-bind="if: short() == null">
+            <div class="form-group form-group-lg">
+                <input type="text" placeholder="Your original URL here" class="form-control" data-bind="value: url" />
+            </div>
+            <p><small>All URLs and click analytics are public and can be accessed by anyone</small></p>
+            <button data-bind="attr: { disabled: url() == null || url().length == 0 }, click: addLink"  type="button" class="btn btn-lg btn-primary">Shorten URL</button>
+        </div>
+        <div data-bind="if: short() != null">
+            <h2 data-bind="text: window.location.origin + '/' + short()"></h2>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4">
+            <h2><span class="glyphicon glyphicon-link"></span><span>Shorten</span></h2>
+            <p>Shorten your URL so it’s ready to be shared everywhere</p>
+        </div>
+        <div class="col-lg-4">
+            <h2><span class="glyphicon glyphicon-send"></span><span>Track</span></h2>
+            <p>Analytics help you know where your clicks are coming from</p>
+        </div>
+        <div class="col-lg-4">
+            <h2><span class="glyphicon glyphicon-user"></span><span> Learn</span></h2>
+            <p>Understand and visualize your audience</p>
+        </div>
+    </div>
+</div>

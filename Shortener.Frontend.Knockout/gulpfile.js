@@ -1,7 +1,5 @@
-// Node modules
 var fs = require('fs'), vm = require('vm'), merge = require('deeply'), chalk = require('chalk'), es = require('event-stream');
 
-// Gulp and plugins
 var gulp = require('gulp'), rjs = require('gulp-requirejs-bundler'), concat = require('gulp-concat'), clean = require('gulp-clean'),
     replace = require('gulp-replace'), uglify = require('gulp-uglify'), htmlreplace = require('gulp-html-replace'), typescript = require('gulp-tsc'),
     useref = require('gulp-useref'), minifyCss = require('gulp-minify-css');
@@ -20,10 +18,6 @@ var requireJsRuntimeConfig = vm.runInNewContext(fs.readFileSync('require.config.
         ],
         insertRequire: ['Main'],
         bundles: {
-            // If you want parts of the site to load on demand, remove them from the 'include' list
-            // above, and group them into bundles here.
-            // 'bundle-name': [ 'some/module', 'another/module' ],
-            // 'another-bundle-name': [ 'yet-another-module' ]
         }
     });
 
@@ -59,17 +53,6 @@ gulp.task('css', function () {
 			.pipe(gulp.dest('./.deploy/'));
 });
 
-// Copies index.html, replacing <script> and <link> tags to reference production URLs
-gulp.task('html', function() {
-    return gulp.src('./index.html')
-        .pipe(htmlreplace({
-            'css': 'shortener.css',
-            'js': 'shortener.js'
-        }))
-        .pipe(gulp.dest('./.deploy/'));
-});
-
-// Removes all files from ./dist/, and the .js/.js.map files compiled from .ts
 gulp.task('clean', function() {
     var distContents = gulp.src('./.deploy/**/*', { read: false }),
         generatedJs = gulp.src(['app/**/*.js'], { read: false })
@@ -80,7 +63,7 @@ gulp.task('clean', function() {
     return es.merge(distContents, generatedJs).pipe(clean());
 });
 
-gulp.task('default', ['html', 'js', 'css'], function(callback) {
+gulp.task('default', ['js', 'css'], function(callback) {
     callback();
     console.log('\nPlaced optimized files in ' + chalk.magenta('.deploy/\n'));
 });

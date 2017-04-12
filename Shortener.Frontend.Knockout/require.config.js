@@ -17,6 +17,7 @@ var require = {
 	main: 'ru'
     }],
     paths: {
+        "bootstrap": "../node_modules/bootstrap/dist/css",
         "require-css": "../node_modules/require-css/css",
         "text": "../node_modules/requirejs-text/text",
         "knockout": "../node_modules/knockout/build/output/knockout-latest",

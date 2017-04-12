@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IDbContext.cs" />
+    <Compile Include="IDbSettings.cs" />
     <Compile Include="IEntityConfigurator.cs" />
     <Compile Include="LinkEntityConfigurator.cs" />
     <Compile Include="LinksRepository.cs" />

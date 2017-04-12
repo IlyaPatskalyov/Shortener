@@ -1,17 +1,18 @@
+import "text!./MyLinksPage.html";
+import "../../components/navigation/NavigationComponent";
 import {LinksApi} from "../../api/LinksApi";
-export = MyLinksPage
 import * as ko from "knockout";
 
 @koComponent(ko, {
     name: "my-links",
-    template: require('text!./MyLinksPage.html')
+    template: require("text!./MyLinksPage.html")
 })
 class MyLinksPage {
 
     private loaded: KnockoutObservable<boolean>;
     private myLinks: KnockoutObservableArray<Link>;
 
-    constructor(params:{  }) {
+    constructor() {
         this.loaded = ko.observable(false);
         this.myLinks = ko.observableArray([]);
 
@@ -24,3 +25,4 @@ class MyLinksPage {
         this.loaded(true);
     }
 }
+export = MyLinksPage;
