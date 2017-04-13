@@ -1,3 +1,5 @@
+import fetchIE8 = require("fetch-ie8");
+
 export class FetcherError {
     public response: Response;
     public innerError: any;
@@ -38,7 +40,7 @@ export class Fetcher {
         init = init || {};
         init.credentials = "same-origin";
 
-        let response = await window.fetch(url, init);
+        let response = await (window.fetch ? window.fetch(url, init) : fetchIE8(url, init));
         if (response.status < 200 || response.status >= 300)
             throw new FetcherError(await response.text(), response);
         if (response.status == 204 || response.status == 1223)

@@ -6,6 +6,7 @@ import {LinksApi} from "../../api/LinksApi";
 export interface IAddLinkPageState {
     url?: string;
     short?: string;
+    isSent?: boolean;
     error?: string;
 }
 
@@ -18,12 +19,14 @@ export class AddLinkPage extends React.Component<{}, IAddLinkPageState> {
 
     private async addLink() {
         try {
+            this.setState({ isSent: true })
             let short = await LinksApi.add(this.state.url);
             this.setState({short: short});
         }
         catch(e) {
             this.setState({ error: e.message })
         }
+        this.setState({ isSent: false })
     }
 
     render() {
@@ -42,11 +45,11 @@ export class AddLinkPage extends React.Component<{}, IAddLinkPageState> {
                                 <small>All URLs and click analytics are public and can be accessed by anyone</small>
                             </p>
                             <Button bsStyle="primary" bsSize="large"
-                                    disabled={!this.state.url || this.state.url.length == 0}
+                                    disabled={this.state.isSent || !this.state.url || this.state.url.length == 0}
                                     onClick={async e => {
                                         this.addLink();
                                         e.preventDefault();
-                                     }}>Shorten URL</Button>
+                                     }}>{this.state.isSent ? "Shortening..." : "Shorten URL"}</Button>
                         </div>
                      :  <div>
                             <h2>{window.location.origin}/{this.state.short}</h2>

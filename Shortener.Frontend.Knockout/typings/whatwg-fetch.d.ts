@@ -83,3 +83,11 @@ declare type RequestInfo = Request|string;
 interface Window {
 	fetch(url: string|Request, init?: RequestInit): Promise<Response>;
 }
+
+
+declare module "fetch-ie8" {
+	function fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
+
+    export = fetch;
+}
+

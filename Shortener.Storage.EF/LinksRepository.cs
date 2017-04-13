@@ -51,7 +51,7 @@ namespace Shortener.Storage.EF
         {
             var id = Guid.NewGuid();
             var created = DateTime.UtcNow;
-            var key = keyRegex.Replace(Convert.ToBase64String(id.ToByteArray()).Substring(0, keyLength), "");
+            var key = keyRegex.Replace(Convert.ToBase64String(id.ToByteArray()), "").Substring(0, keyLength);
 
             var link = new Link()
                        {

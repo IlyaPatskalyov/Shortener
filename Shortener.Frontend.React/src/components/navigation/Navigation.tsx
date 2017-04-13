@@ -11,11 +11,9 @@ export class Navigation extends React.Component<{}, {}> {
                     <a href="#">URL Shortener</a>
                 </Navbar.Brand>
             </Navbar.Header>
-            <Navbar.Collapse>
-                <Nav>
-                    <NavItem eventKey={1} href="#/my-links">My links</NavItem>
-                </Nav>
-            </Navbar.Collapse>
+            <Nav>
+                <NavItem eventKey={1} href="#/my-links">My links</NavItem>
+            </Nav>
         </Navbar>);
     }
 }
